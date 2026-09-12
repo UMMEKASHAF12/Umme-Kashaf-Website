@@ -17,7 +17,7 @@ import ummeImg   from "./assets/umme.png";
 import linkedinSS from "./assets/linkedin-ss.png";
 
 import cisco from "./assets/cisco.png";
-import forbes from "./assets/forbes.png";
+import forbes from "./assets/Forbes.png";
 import dropbox from "./assets/dropbox.png";
 import splunk from "./assets/splunk.png";
 import netapp from "./assets/netapp.png";
