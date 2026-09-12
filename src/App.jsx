@@ -1,5 +1,4 @@
-import HeroSection from "./HeroSection";
- 
+import HeroSection from "./Herosection"; 
 export default function App() {
   return (
     <div>
