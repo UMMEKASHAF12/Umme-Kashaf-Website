@@ -21,7 +21,7 @@ import forbes from "./assets/forbes.png";
 import dropbox from "./assets/dropbox.png";
 import splunk from "./assets/splunk.png";
 import netapp from "./assets/netapp.png";
-import zayo from "./assets/zayo.png";
+import zayo from "./assets/Zayo.png";
 
 const brands = [
   { name: "Cisco", logo: cisco },
