@@ -24,9 +24,8 @@ const plans = {
         "Mobile Optimized",
         "48 hours delivery",
       ],
-      oldPrice: "$99",
-      price: "$49",
-      discount: "50% OFF",
+     
+      price: "$99",
     },
     {
       name: "Growth Profile",
@@ -41,16 +40,15 @@ const plans = {
         "Mobile Optimized",
         "72 hours delivery",
       ],
-      oldPrice: "$150",
-      price: "$75",
-      discount: "50% OFF",
+   price: "$150",
+      
     },
     {
       name: "Premium Profile",
       popular: false,
       features: [
         "3 Banners Slideshow",
-        "2 Profile headshots",
+        "1 Profile headshots",
         "3 Featured section images",
         "Complete Profile Optimization",
         "2 Cheatsheets for LinkedIn content",
@@ -60,9 +58,7 @@ const plans = {
         "Mobile Optimized",
         "7 days delivery",
       ],
-      oldPrice: "$500",
-      price: "$250",
-      discount: "50% OFF",
+      price: "$399",
     },
   ],
   "Content Design": [
