@@ -56,7 +56,7 @@ const plans = {
         "Unlimited Revisions",
         "JPEG + editable File",
         "Mobile Optimized",
-        "7 days delivery",
+        "3 days delivery",
       ],
       price: "$399",
     },
