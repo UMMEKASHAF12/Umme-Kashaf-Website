@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, memo } from "react";
 
 const stats = [
-  { val: 50, suffix: "+", label: "Worked with Global Clients Worldwide", prefix: "" },
+  { val: 70, suffix: "+", label: "Worked with Global Clients Worldwide", prefix: "" },
   { val: 3, suffix: "+", label: "years of design experience", prefix: "" },
-  { val: 6.5, suffix: "K+", label: "LinkedIn following", prefix: "", decimal: 1 },
+  { val: 7.1, suffix: "K+", label: "LinkedIn following", prefix: "", decimal: 1 },
   { val: 10, suffix: "%", label: "Creator Worldwide", prefix: "TOP " },
 ];
 
