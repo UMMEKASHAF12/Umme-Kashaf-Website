@@ -38,6 +38,7 @@ const tabData = {
       { id: 10, img: afterImg },
     ],
   },
+
   "Content Design": {
     w: 200,
     h: 240,
@@ -47,7 +48,6 @@ const tabData = {
       { id: 13, img: ch3Img },
       { id: 14, img: ch4Img },
     ],
-    // Ab Neeche wali row mein bhi same uper wali images ayengi
     row2: [
       { id: 15, img: ch1Img },
       { id: 16, img: ch2Img },
@@ -55,6 +55,7 @@ const tabData = {
       { id: 18, img: ch4Img },
     ],
   },
+
   "Social Media Posters": {
     w: 210,
     h: 210,
@@ -75,168 +76,272 @@ const tabData = {
 
 const tabs = Object.keys(tabData);
 
-// High Performance Hardware-Accelerated CSS
 const STYLE = `
-  @keyframes fpL { 
-    0% { transform: translate3d(0, 0, 0); } 
-    100% { transform: translate3d(-50%, 0, 0); } 
+  /* =========================
+     HIGH PERFORMANCE MARQUEE
+  ========================== */
+
+  @keyframes fpLeft {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
   }
-  @keyframes fpR { 
-    0% { transform: translate3d(-50%, 0, 0); } 
-    100% { transform: translate3d(0, 0, 0); } 
+
+  @keyframes fpRight {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
   }
 
   .fp-tab-btn {
-    padding: 8px 18px; border-radius: 999px; font-size: 0.8rem;
-    font-weight: 600; cursor: pointer; border: 1.5px solid #2a2a2a;
-    background: transparent; color: #888;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
-    font-family: 'Manrope', sans-serif; white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    border: 1.5px solid #2a2a2a;
+    background: transparent;
+    color: #888;
+
+    font-family: 'Manrope', sans-serif;
+    white-space: nowrap;
+
     outline: none;
     -webkit-tap-highlight-color: transparent;
-  }
-  .fp-tab-btn:hover { border-color: #e00; color: #e00; }
-  .fp-tab-btn.on { background: #e00; border-color: #e00; color: #fff; }
 
+    transition:
+      background-color 0.18s ease,
+      color 0.18s ease,
+      border-color 0.18s ease;
+  }
+
+  .fp-tab-btn:hover {
+    border-color: #e00;
+    color: #e00;
+  }
+
+  .fp-tab-btn.on {
+    background: #e00;
+    border-color: #e00;
+    color: #fff;
+  }
+
+  /* Only active panel exists in DOM */
   .fp-tab-content {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.25s ease-in-out;
-  }
-  .fp-tab-content.active {
-    display: block;
-    opacity: 1;
+    width: 100%;
   }
 
-  .fp-row { 
-    overflow: hidden; 
-    margin-bottom: 12px; 
+  .fp-row {
     width: 100%;
-    contain: layout paint style;
+    overflow: hidden;
+    margin-bottom: 12px;
+
+    /* Isolates the marquee from the rest of page */
+    contain: layout paint;
   }
 
   .fp-track {
-    display: flex; 
-    gap: 12px; 
+    display: flex;
     width: max-content;
-    will-change: transform;
+    gap: 12px;
+
+    /* GPU compositing */
     transform: translate3d(0, 0, 0);
+    will-change: transform;
+
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-play-state: running;
   }
 
-  .fp-track.left  { animation: fpL var(--spd, 25s) linear infinite; }
-  .fp-track.right { animation: fpR var(--spd, 30s) linear infinite; }
-  
-  .fp-row:hover .fp-track { animation-play-state: paused; }
+  .fp-track.left {
+    animation-name: fpLeft;
+    animation-duration: 25s;
+  }
+
+  .fp-track.right {
+    animation-name: fpRight;
+    animation-duration: 30s;
+  }
 
   .fp-card {
-    flex-shrink: 0; 
+    flex: 0 0 auto;
+
     overflow: hidden;
-    background: #111; 
+    background: #111;
     border: 1px solid #1e1e1e;
-    contain: strict;
     border-radius: 6px;
+
+    /* Prevent expensive rendering outside visible area */
+    contain: paint;
   }
 
   .fp-card img {
-    width: 100%; 
+    width: 100%;
     height: 100%;
-    object-fit: cover; 
+
     display: block;
+
+    object-fit: cover;
+
+    /* Browser-friendly image rendering */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   @media (max-width: 600px) {
-    .fp-row { margin-bottom: 8px; }
-    .fp-track { gap: 8px; }
-    .fp-tab-btn { padding: 6px 14px; font-size: 0.74rem; }
+    .fp-row {
+      margin-bottom: 8px;
+    }
+
+    .fp-track {
+      gap: 8px;
+    }
+
+    .fp-tab-btn {
+      padding: 6px 14px;
+      font-size: 0.74rem;
+    }
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .fp-track {
+      animation: none !important;
+      transform: none !important;
+    }
   }
 `;
 
-// Memoized for smooth tab switching without extra re-renders
-const TabCategoryView = memo(function TabCategoryView({ cfg }) {
-  // Multiply entries so loop moves smoothly without white-space
-  const loopedRow1 = [...cfg.row1, ...cfg.row1, ...cfg.row1];
-  const loopedRow2 = [...cfg.row2, ...cfg.row2, ...cfg.row2];
 
-  const cardWidth = `clamp(${Math.round(cfg.w * 0.7)}px, 45vw, ${cfg.w}px)`;
-  const cardHeight = `clamp(${Math.round(cfg.h * 0.7)}px, 35vw, ${cfg.h}px)`;
+/* =========================
+   MARQUEE ROW
+========================= */
+
+const MarqueeRow = memo(function MarqueeRow({
+  items,
+  width,
+  height,
+  direction,
+}) {
+  /*
+    Only 2 copies are needed.
+    3 copies were unnecessarily increasing DOM nodes,
+    image decoding and paint work.
+  */
+  const loopItems = [...items, ...items];
+
+  const cardWidth = `clamp(
+    ${Math.round(width * 0.7)}px,
+    45vw,
+    ${width}px
+  )`;
+
+  const cardHeight = `clamp(
+    ${Math.round(height * 0.7)}px,
+    35vw,
+    ${height}px
+  )`;
 
   return (
-    <>
-      <div className="fp-row">
-        <div className="fp-track left" style={{ "--spd": "25s" }}>
-          {loopedRow1.map((item, i) => (
-            <div
-              key={`r1-${item.id}-${i}`}
-              className="fp-card"
-              style={{
-                width: cardWidth,
-                height: cardHeight,
-              }}
-            >
-              <img
-                src={item.img}
-                alt="project"
-                loading="eager"
-                decoding="async"
-              />
-            </div>
-          ))}
-        </div>
+    <div className="fp-row">
+      <div
+        className={`fp-track ${direction}`}
+        style={{
+          animationDuration:
+            direction === "left" ? "25s" : "30s",
+        }}
+      >
+        {loopItems.map((item, index) => (
+          <div
+            key={`${item.id}-${index}`}
+            className="fp-card"
+            style={{
+              width: cardWidth,
+              height: cardHeight,
+            }}
+          >
+            <img
+              src={item.img}
+              alt=""
+              loading={index < items.length ? "eager" : "lazy"}
+              decoding="async"
+              draggable="false"
+            />
+          </div>
+        ))}
       </div>
+    </div>
+  );
+});
 
-      <div className="fp-row">
-        <div className="fp-track right" style={{ "--spd": "30s" }}>
-          {loopedRow2.map((item, i) => (
-            <div
-              key={`r2-${item.id}-${i}`}
-              className="fp-card"
-              style={{
-                width: cardWidth,
-                height: cardHeight,
-              }}
-            >
-              <img
-                src={item.img}
-                alt="project"
-                loading="eager"
-                decoding="async"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+
+/* =========================
+   ACTIVE CATEGORY ONLY
+========================= */
+
+const TabCategoryView = memo(function TabCategoryView({ cfg }) {
+  return (
+    <>
+      <MarqueeRow
+        items={cfg.row1}
+        width={cfg.w}
+        height={cfg.h}
+        direction="left"
+      />
+
+      <MarqueeRow
+        items={cfg.row2}
+        width={cfg.w}
+        height={cfg.h}
+        direction="right"
+      />
     </>
   );
 });
 
+
+/* =========================
+   MAIN SECTION
+========================= */
+
 export default function FeaturedProjectsSection() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [inView, setInView] = useState(false);
+
   const sectionRef = useRef(null);
 
   useEffect(() => {
-    // Fast Preloading of Images in Background
-    Object.values(tabData).forEach((category) => {
-      [...category.row1, ...category.row2].forEach((item) => {
-        if (item.img) {
-          const img = new Image();
-          img.src = item.img;
-        }
-      });
-    });
+    const section = sectionRef.current;
 
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
           setInView(true);
-          obs.disconnect();
+          observer.disconnect();
         }
       },
-      { threshold: 0.01 }
+      {
+        threshold: 0.05,
+        rootMargin: "100px",
+      }
     );
-    if (sectionRef.current) obs.observe(sectionRef.current);
-    return () => obs.disconnect();
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -248,19 +353,28 @@ export default function FeaturedProjectsSection() {
         padding: "48px 0 60px",
         overflow: "hidden",
         fontFamily: "'Manrope', sans-serif",
+        contain: "layout paint",
       }}
     >
       <style>{STYLE}</style>
 
-      {/* Title */}
+      {/* TITLE */}
       <div
         style={{
           textAlign: "center",
           marginBottom: 20,
           padding: "0 16px",
+
           opacity: inView ? 1 : 0,
-          transform: inView ? "translateY(0)" : "translateY(12px)",
-          transition: "opacity 0.4s ease, transform 0.4s ease",
+
+          transform: inView
+            ? "translate3d(0,0,0)"
+            : "translate3d(0,12px,0)",
+
+          transition:
+            "opacity 0.35s ease, transform 0.35s ease",
+
+          willChange: "opacity, transform",
         }}
       >
         <h2
@@ -273,11 +387,14 @@ export default function FeaturedProjectsSection() {
             margin: 0,
           }}
         >
-          Featured <span style={{ color: "#e00" }}>Projects</span>
+          Featured{" "}
+          <span style={{ color: "#e00" }}>
+            Projects
+          </span>
         </h2>
       </div>
 
-      {/* Tabs */}
+      {/* TABS */}
       <div
         style={{
           display: "flex",
@@ -286,14 +403,18 @@ export default function FeaturedProjectsSection() {
           gap: 8,
           marginBottom: 24,
           padding: "0 16px",
+
           opacity: inView ? 1 : 0,
-          transition: "opacity 0.4s ease 0.05s",
+
+          transition: "opacity 0.35s ease 0.05s",
         }}
       >
         {tabs.map((tab) => (
           <button
             key={tab}
-            className={`fp-tab-btn ${activeTab === tab ? "on" : ""}`}
+            className={`fp-tab-btn ${
+              activeTab === tab ? "on" : ""
+            }`}
             onClick={() => setActiveTab(tab)}
           >
             {tab}
@@ -301,15 +422,14 @@ export default function FeaturedProjectsSection() {
         ))}
       </div>
 
-      {/* Tab Panels */}
-      {tabs.map((tab) => (
-        <div
-          key={tab}
-          className={`fp-tab-content ${activeTab === tab ? "active" : ""}`}
-        >
-          {activeTab === tab && <TabCategoryView cfg={tabData[tab]} />}
+      {/* ACTIVE TAB ONLY */}
+      {inView && (
+        <div className="fp-tab-content">
+          <TabCategoryView
+            cfg={tabData[activeTab]}
+          />
         </div>
-      ))}
+      )}
     </section>
   );
 }
