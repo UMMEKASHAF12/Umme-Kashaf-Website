@@ -117,15 +117,13 @@ const plans = {
     {
       name: "Starter",
       popular: false,
-      features: ["10 designs/month", "unlimited revisions", "Monthly check-in"],
-      oldPrice: "$250",
+      features: ["12 designs/month", "content you porvides design me", "unlimited revisions", "Monthly check-in"],
       price: "$125",
-      discount: "50% OFF",
     },
     {
       name: "Growth",
       popular: true,
-      features: ["20 designs/month", "Unlimited revisions",  "Weekly check-in", "Priority support"],
+      features: ["18 designs/month",  "done-for-you", "write complte post wiyth caption stronger hook", "Unlimited revisions",  "Weekly check-in", "Priority support"],
       oldPrice: "$499",
       price: "$249",
       discount: "50% OFF",
