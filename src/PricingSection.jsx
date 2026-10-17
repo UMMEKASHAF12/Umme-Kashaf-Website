@@ -115,26 +115,22 @@ const plans = {
   ],
   "Monthly Retainer": [
     {
-      name: "Starter",
+      name: "Starter Design Only",
       popular: false,
-      features: ["12 designs/month", "content you porvides design me", "unlimited revisions", "Monthly check-in"],
-      price: "$125",
-    },
-    {
-      name: "Growth",
-      popular: true,
-      features: ["18 designs/month",  "done-for-you", "write complte post wiyth caption stronger hook", "Unlimited revisions",  "Weekly check-in", "Priority support"],
-      oldPrice: "$499",
+      features: ["14 designed posts/month (3-4 per week)", "Graphics or carousels in your brand style", "2 revision rounds per post", "Monthly check-in"],
       price: "$249",
-      discount: "50% OFF",
     },
     {
-      name: "Premium",
+      name: "Content + Design",
+      popular: true,
+      features: ["20 complete posts/month (3-5 per week)",  "Audience and topic research", "Strong hook and full caption written for you", "Graphics or carousels in your brand style",  "Weekly check-in", "Priority support"],
+      price: "$349",
+    },
+    {
+      name: "Full Management",
       popular: false,
-      features: ["30 designs/month", "Unlimited revisions", "Same-day turnaround", "Managed Comments", "Track Performance"],
-      oldPrice: "$699",
-      price: "$350",
-      discount: "50% OFF",
+      features: ["28 complete posts/month (5-7 per week)", "Everything in Content + Design", "Posting schedule managed for you", "Comment and DM reply drafts for your approval", "Monthly performance report (impressions, engagement, profile views)", "Monthly strategy review with next steps","Priority support"],
+      price: "$550",
     },
   ],
 };
