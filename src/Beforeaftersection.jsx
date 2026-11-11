@@ -1,5 +1,4 @@
-import { useState, useRef, useCallback, useEffect, memo } from "react";
-
+import { useState, useRef, useCallback, memo } from "react";
 import beforeImg from "./assets/before.jpg";
 import afterImg from "./assets/after.jpg";
 
@@ -10,38 +9,21 @@ const slides = [
     after: afterImg,
     name: "Gerald Wood",
     tag: "Full LinkedIn Profile Transformation",
+    review: "“I do not normally respond to cold-call DMs. But when Umme contacted me, something struck a chord... She offered to upgrade my LinkedIn Profile so that I can appeal to more customers... Working with Umme was very uncomplicated and rewarding... I highly recommend for LinkedIn services of all kind!”",
+    title: "CEO, AC Authentic | Architect for Change"
   },
 ];
 
 const Slider = memo(({ slide }) => {
-  const [interacted, setInteracted] = useState(false);
-
+  const [pos, setPos] = useState(50);
   const wrapRef = useRef(null);
-  const afterRef = useRef(null);
-  const dividerRef = useRef(null);
   const dragging = useRef(false);
-  const frame = useRef(null);
-  const x = useRef(50);
 
-  const update = useCallback((clientX) => {
+  const handlePointerMove = useCallback((e) => {
+    if (!wrapRef.current) return;
     const rect = wrapRef.current.getBoundingClientRect();
-    x.current = Math.max(
-      0,
-      Math.min(((clientX - rect.left) / rect.width) * 100, 100)
-    );
-
-    if (!frame.current) {
-      frame.current = requestAnimationFrame(() => {
-        const p = x.current;
-        afterRef.current.style.width = `${p}%`;
-        dividerRef.current.style.left = `${p}%`;
-        frame.current = null;
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    return () => frame.current && cancelAnimationFrame(frame.current);
+    const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+    setPos((x / rect.width) * 100);
   }, []);
 
   return (
@@ -57,286 +39,216 @@ const Slider = memo(({ slide }) => {
         onPointerDown={(e) => {
           dragging.current = true;
           wrapRef.current.setPointerCapture(e.pointerId);
-          update(e.clientX);
-          setInteracted(true);
+          handlePointerMove(e);
         }}
         onPointerMove={(e) => {
-          if (dragging.current) update(e.clientX);
+          if (dragging.current) handlePointerMove(e);
         }}
         onPointerUp={() => (dragging.current = false)}
         onPointerCancel={() => (dragging.current = false)}
       >
-        <div className="bas-layer">
-          <img src={slide.before} alt="Before Transformation" loading="lazy" />
+        <img src={slide.before} alt="Before Transformation" className="bas-img" />
+        <div className="bas-after" style={{ clipPath: `polygon(0 0, ${pos}% 0, ${pos}% 100%, 0 100%)` }}>
+          <img src={slide.after} alt="After Transformation" className="bas-img" />
         </div>
-
-        <div ref={afterRef} className="bas-after">
-          <img src={slide.after} alt="After Transformation" loading="lazy" />
-        </div>
-
-        <div ref={dividerRef} className="bas-divider">
+        <div className="bas-divider" style={{ left: `${pos}%` }}>
           <div className="bas-handle">
             <span>‹</span>
             <span>›</span>
           </div>
         </div>
-
-        {!interacted && (
-          <div className="bas-hint">← Drag to reveal →</div>
-        )}
       </div>
 
-      <div className="bas-info">
-        <span className="bas-name">{slide.name}</span>
-        <span className="bas-tag">{slide.tag}</span>
+      <div className="bas-info-card">
+        <div className="bas-info-header">
+          <span className="bas-name">{slide.name}</span>
+          <span className="bas-tag">{slide.tag}</span>
+        </div>
+        <p className="bas-review-text">{slide.review}</p>
+        <span className="bas-client-title">{slide.title}</span>
       </div>
     </div>
   );
 });
 
-export default function BeforeAfterSection() {
-  const sectionRef = useRef(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          obs.disconnect();
-        }
-      },
-      { rootMargin: "150px" }
-    );
-
-    if (sectionRef.current) obs.observe(sectionRef.current);
-    return () => obs.disconnect();
-  }, []);
-
+export default function ProjectsSection() {
   return (
-    <section
-      ref={sectionRef}
-      id="transformation-section"
-      className="bas-section"
-    >
+    <section id="transformation-section" className="bas-section">
       <style>{`
         .bas-section {
-          background:#000;
-          padding:80px 24px 88px;
-          font-family:'Manrope',sans-serif;
-          overflow:hidden;
+          background: #1C110E;
+          padding: 80px 24px 88px;
+          font-family: 'Inter', sans-serif;
+          overflow: hidden;
+          border-top: 1px solid rgba(142,24,37,0.3);
+          border-bottom: 1px solid rgba(142,24,37,0.3);
         }
-
         .bas-header {
-          text-align:center;
-          margin-bottom:40px;
-          opacity:0;
-          transform:translateY(12px);
-          transition:.35s ease;
+          text-align: center;
+          margin-bottom: 40px;
         }
-
-        .bas-header.visible,
-        .bas-grid.visible {
-          opacity:1;
-          transform:translateY(0);
-        }
-
         .bas-header-tag {
-          display:block;
-          color:#e00;
-          font-size:.68rem;
-          font-weight:700;
-          letter-spacing:.15em;
-          text-transform:uppercase;
-          margin-bottom:12px;
+          display: inline-block;
+          color: var(--butter-yellow, #FFEDAD);
+          background: var(--cherry-red, #8E1825);
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          padding: 4px 14px;
+          border-radius: 999px;
+          margin-bottom: 12px;
         }
-
         .bas-header h2 {
-          color:#fff;
-          font-size:clamp(1.8rem,4vw,2.8rem);
-          font-weight:900;
-          margin:0 0 12px;
+          color: var(--cream, #FFF7E6);
+          font-size: clamp(1.8rem, 4vw, 2.8rem);
+          font-weight: 900;
+          margin: 0 0 12px;
         }
-
         .bas-header h2 span {
-          color:#e00;
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          color: var(--butter-yellow, #FFEDAD);
         }
-
         .bas-header p {
-          color:#888;
-          font-size:.88rem;
-          margin:0;
+          color: var(--columbia-blue, #C8D9EC);
+          font-size: 0.88rem;
+          margin: 0;
         }
-
         .bas-grid {
-          max-width:680px;
-          margin:auto;
-          opacity:0;
-          transform:translateY(12px);
-          transition:.35s ease .05s;
+          max-width: 680px;
+          margin: auto;
         }
-
-        .bas-labels,
-        .bas-info {
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-        }
-
         .bas-labels {
-          margin-bottom:10px;
-          padding:0 4px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+          padding: 0 4px;
         }
-
-        .bas-before-label,
-        .bas-after-label {
-          font-size:.72rem;
-          font-weight:800;
-          text-transform:uppercase;
-          letter-spacing:.1em;
+        .bas-before-label, .bas-after-label {
+          font-size: .72rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: .1em;
         }
-
-        .bas-before-label { color:#777; }
-        .bas-after-label { color:#e00; }
-
+        .bas-before-label { color: #888; }
+        .bas-after-label { color: var(--butter-yellow, #FFEDAD); }
         .bas-wrap {
-          position:relative;
-          width:100%;
-          aspect-ratio:1000/900;
-          overflow:hidden;
-          cursor:ew-resize;
-          touch-action:none;
-          user-select:none;
-          border:1px solid #222;
-          border-radius:16px;
-          background:#050505;
-          contain:paint;
+          position: relative;
+          width: 100%;
+          aspect-ratio: 1000/900;
+          overflow: hidden;
+          cursor: ew-resize;
+          touch-action: none;
+          user-select: none;
+          border: 1.5px solid rgba(255, 237, 173, 0.25);
+          border-radius: 16px;
+          background: #0b0705;
+          box-shadow: 0 15px 40px rgba(0,0,0,0.5);
         }
-
-        .bas-layer,
+        .bas-img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          pointer-events: none;
+          user-select: none;
+          display: block;
+        }
         .bas-after {
-          position:absolute;
-          inset:0;
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 2;
+          will-change: clip-path;
         }
-
-        .bas-layer img,
-        .bas-after img {
-          width:100%;
-          height:100%;
-          object-fit:contain;
-          display:block;
-          pointer-events:none;
-          user-select:none;
-        }
-
-        .bas-after {
-          width:50%;
-          right:auto;
-          overflow:hidden;
-          will-change:width;
-        }
-
-        .bas-after img {
-          width:calc(100% / 0.5);
-          max-width:none;
-        }
-
         .bas-divider {
-          position:absolute;
-          top:0;
-          bottom:0;
-          left:50%;
-          width:2px;
-          background:#fff;
-          transform:translateX(-50%);
-          pointer-events:none;
-          will-change:left;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 2.5px;
+          background: var(--butter-yellow, #FFEDAD);
+          transform: translateX(-50%);
+          pointer-events: none;
+          z-index: 3;
         }
-
         .bas-handle {
-          position:absolute;
-          top:50%;
-          left:50%;
-          transform:translate(-50%,-50%);
-          width:38px;
-          height:38px;
-          border-radius:50%;
-          background:#e00;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          color:#fff;
-          font-size:24px;
-          line-height:1;
-          box-shadow:0 4px 20px rgba(220,0,0,.35);
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%,-50%);
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          background: var(--cherry-red, #8E1825);
+          border: 2px solid var(--butter-yellow, #FFEDAD);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--butter-yellow, #FFEDAD);
+          font-size: 20px;
+          line-height: 1;
+          box-shadow: 0 4px 20px rgba(142,24,37,.5);
         }
-
-        .bas-handle span {
-          margin-top:-3px;
+        .bas-handle span { margin-top: -3px; }
+        .bas-info-card {
+          background: #2A1A17;
+          border: 1.5px solid rgba(142, 24, 37, 0.4);
+          border-radius: 16px;
+          padding: 20px;
+          margin-top: 16px;
+          text-align: left;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.3);
         }
-
-        .bas-hint {
-          position:absolute;
-          bottom:14px;
-          left:50%;
-          transform:translateX(-50%);
-          background:rgba(0,0,0,.75);
-          color:#fff;
-          padding:6px 16px;
-          border-radius:999px;
-          font-size:.65rem;
-          font-weight:700;
-          white-space:nowrap;
-          pointer-events:none;
+        .bas-info-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+          padding-bottom: 10px;
+          border-bottom: 1px solid rgba(200,217,236,0.12);
         }
-
-        .bas-info {
-          padding:14px 4px 0;
-          gap:12px;
-        }
-
         .bas-name {
-          color:#fff;
-          font-size:.88rem;
-          font-weight:800;
+          color: var(--cream, #FFF7E6);
+          font-size: 1rem;
+          font-weight: 800;
         }
-
         .bas-tag {
-          color:#e00;
-          font-size:.62rem;
-          font-weight:700;
-          text-transform:uppercase;
-          letter-spacing:.06em;
-          border:1px solid rgba(220,0,0,.3);
-          border-radius:999px;
-          padding:4px 12px;
+          color: var(--butter-yellow, #FFEDAD);
+          background: rgba(142,24,37,0.4);
+          font-size: 0.62rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: .06em;
+          border: 1px solid rgba(255,237,173,0.3);
+          border-radius: 999px;
+          padding: 4px 12px;
         }
-
-        @media(max-width:600px) {
-          .bas-section {
-            padding:60px 16px 70px;
-          }
-
-          .bas-tag {
-            font-size:.55rem;
-            padding:4px 8px;
-          }
+        .bas-review-text {
+          font-size: 0.88rem;
+          color: var(--columbia-blue, #C8D9EC);
+          line-height: 1.5;
+          font-style: italic;
+          margin: 0 0 10px 0;
+        }
+        .bas-client-title {
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: var(--butter-yellow, #FFEDAD);
+          display: block;
         }
       `}</style>
 
-      <div className={`bas-header ${visible ? "visible" : ""}`}>
-        <span className="bas-header-tag">Transformations</span>
-
-        <h2>
-          Before & <span>After</span>
-        </h2>
-
-        <p>
-          Drag the slider to see the transformation from blank profile to premium brand.
-        </p>
+      <div className="bas-header">
+        <span className="bas-header-tag">Proof & Transformation</span>
+        <h2>Before & <span>After</span></h2>
+        <p>Drag the slider to see the transformation from blank profile to premium brand.</p>
       </div>
 
-      <div className={`bas-grid ${visible ? "visible" : ""}`}>
+      <div className="bas-grid">
         {slides.map((slide) => (
           <Slider key={slide.id} slide={slide} />
         ))}
