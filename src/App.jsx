@@ -9,7 +9,6 @@ import Quiz from "./Quiz"
 import GapCheckFormSection from "./GapCheckFormSection";
 import Meet from "./Meet";
 import PricingSection from "./PricingSection";
-import ObjectionsSection from "./ObjectionsSection";
 import FaqSection from "./FAQSection";
 import Closing from "./Closing";
 
@@ -26,7 +25,6 @@ export default function App() {
       <Quiz />
       <Meet />
       <PricingSection />
-      <ObjectionsSection />
             <GapCheckFormSection />
       <FaqSection />
       <Closing />

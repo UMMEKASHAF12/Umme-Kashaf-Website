@@ -200,8 +200,7 @@ export default memo(function HeroSection() {
           </h1>
 
           <p className="hero-subdescription">
-            You're great at your work. Your profile just doesn't say so. I rebuild it from your website, then write and design your content in your voice, so you show up as the expert you are without giving up your week.
-          </p>
+I rebuild your profile and write your posts in your voice, so the right people start conversations with you. Done for you in 60 days.          </p>
 
           <div className="flags-row">
             {flags.map(f => (
@@ -228,7 +227,7 @@ export default memo(function HeroSection() {
 
       {/* LOGOS SECTION */}
       <div className="logos-section">
-        <p className="logos-caption">My clients from</p>
+        <p className="logos-caption">Clients have worked at</p>
         <div className="marquee-wrapper">
           <div className="marquee-track">
             {marqueeItems.map((brand, i) => (

@@ -4,8 +4,8 @@ export default memo(function WhatYouGetSection() {
   const items = [
     {
       step: "01",
-      title: "Website-to-profile gap review",
-      desc: "Comprehensive audit aligning your core web messaging with your LinkedIn presence.",
+      title: "Profile review:",
+      desc: "I study your profile, your website (if you have one) and your own words first.",
       badge: "Audit & Analysis"
     },
     {
@@ -17,7 +17,7 @@ export default memo(function WhatYouGetSection() {
     {
       step: "03",
       title: "35 pieces over 60 days",
-      desc: "[15 posts, 10 carousels, 10 cheatsheet], designed completely in your unique voice.",
+      desc: "Complete satisfaction guaranteed 3-5 post per week designed completely in your unique voice.",
       badge: "Content OS"
     },
     {

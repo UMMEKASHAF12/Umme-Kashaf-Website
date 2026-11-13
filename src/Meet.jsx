@@ -155,7 +155,7 @@ export default memo(function MeetSection() {
 
             <div className="meet-story">
               <p>
-                I’m Umme, founder of <span className="meet-highlight">4x-Vision</span>, based in Karachi. I started with a design course in 2023, and I designed my first LinkedIn banner in 2024.
+                I’m Umme Kashaf,  based in Pakistan. I started with a design course in 2023, and I designed my first LinkedIn banner in 2024.
               </p>
               <p>
                 I started with banners. A founder would send me their profile, I’d design something sharp, and it looked great.

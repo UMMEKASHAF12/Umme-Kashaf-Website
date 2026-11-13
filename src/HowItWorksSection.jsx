@@ -10,7 +10,7 @@ export default memo(function HowItWorksSection() {
     {
       days: "Days 8-60",
       title: "Post",
-      desc: "3-4 posts a week: carousels, cheatsheets and single-image posts, each with a scroll-stopping hook. You approve, then they go live."
+      desc: "3-5 posts a week: carousels, cheatsheets and single-image posts, each with a scroll-stopping hook. You approve, then they go live."
     },
     {
       days: "Throughout",
